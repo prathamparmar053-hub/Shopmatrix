@@ -15,10 +15,12 @@ async function startServer() {
     if (!twilioClient) {
       const sid = process.env.TWILIO_ACCOUNT_SID;
       const token = process.env.TWILIO_AUTH_TOKEN;
-      if (sid && token && sid.startsWith('AC')) {
+      if (sid && token) {
+        if (!sid.startsWith('AC')) {
+          console.warn("Invalid TWILIO_ACCOUNT_SID: must start with 'AC'. Please update your Secrets.");
+          return null;
+        }
         twilioClient = twilio(sid, token);
-      } else if (sid || token) {
-        console.warn("Twilio credentials appear invalid (SID must start with AC). SMS will be skipped.");
       }
     }
     return twilioClient;

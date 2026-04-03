@@ -518,7 +518,7 @@ export default function App() {
                   fetch('/api/notify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: `New order placed on Shopmatrix for ₹${total.toFixed(2)} by ${user?.email || 'Guest'}` })
+                    body: JSON.stringify({ message: `New order placed on Shopmatrix for ₹${cartTotal.toFixed(2)} by ${user?.email || 'Guest'}` })
                   }).catch(console.error);
                 }}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-colors shadow-md ${isPaymentValid ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
