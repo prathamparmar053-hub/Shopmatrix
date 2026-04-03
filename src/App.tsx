@@ -74,11 +74,11 @@ export default function App() {
   const [trackingOrder, setTrackingOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('shophub_user');
+    const savedUser = localStorage.getItem('shopmatrix_user');
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
-    const savedOrders = localStorage.getItem('shophub_orders');
+    const savedOrders = localStorage.getItem('shopmatrix_orders');
     if (savedOrders) {
       setOrders(JSON.parse(savedOrders));
     }
@@ -89,20 +89,20 @@ export default function App() {
     if (loginEmail && loginPassword) {
       const newUser = { email: loginEmail, mobile: loginMobile, address: loginAddress };
       setUser(newUser);
-      localStorage.setItem('shophub_user', JSON.stringify(newUser));
+      localStorage.setItem('shopmatrix_user', JSON.stringify(newUser));
       setLoginPassword('');
     }
   };
 
   const handleSignOut = () => {
     setUser(null);
-    localStorage.removeItem('shophub_user');
+    localStorage.removeItem('shopmatrix_user');
   };
 
   const cancelOrder = (orderId: string) => {
     const updatedOrders = orders.filter(order => order.id !== orderId);
     setOrders(updatedOrders);
-    localStorage.setItem('shophub_orders', JSON.stringify(updatedOrders));
+    localStorage.setItem('shopmatrix_orders', JSON.stringify(updatedOrders));
   };
 
   const isPaymentValid = selectedPaymentMethod && (
@@ -182,7 +182,7 @@ export default function App() {
               <div className="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mb-4">
                 <User className="w-8 h-8 text-indigo-600" />
               </div>
-              <h2 className="text-xl font-bold mb-2">Welcome to ShopHub</h2>
+              <h2 className="text-xl font-bold mb-2 font-['Roboto']">Welcome to Shopmatrix</h2>
               <p className="text-gray-500 text-sm mb-6">Sign in to track orders, save items, and checkout faster.</p>
               
               <form className="w-full flex flex-col gap-4" onSubmit={handleSignIn}>
@@ -254,7 +254,7 @@ export default function App() {
               </button>
               {expandedSection === 'about' && (
                 <div className="px-4 pb-4 pt-1 text-sm text-gray-600 leading-relaxed bg-gray-50">
-                  ShopHub is your premier destination for high-quality electronics, sports gear, and modern apparel. We believe in providing top-tier products with exceptional customer service.
+                  Shopmatrix is your premier destination for high-quality electronics, sports gear, and modern apparel. We believe in providing top-tier products with exceptional customer service.
                 </div>
               )}
             </div>
@@ -273,7 +273,7 @@ export default function App() {
                 <div className="px-4 pb-4 pt-1 text-sm text-gray-600 bg-gray-50 flex flex-col gap-2">
                   <p><strong>Name:</strong> Harsh .S. Parmar</p>
                   <p><strong>Mobile:</strong> 1234567890</p>
-                  <p><strong>Email:</strong> support@shophub.com</p>
+                  <p><strong>Email:</strong> support@shopmatrix.com</p>
                 </div>
               )}
             </div>
@@ -501,7 +501,7 @@ export default function App() {
                   };
                   const updatedOrders = [newOrder, ...orders];
                   setOrders(updatedOrders);
-                  localStorage.setItem('shophub_orders', JSON.stringify(updatedOrders));
+                  localStorage.setItem('shopmatrix_orders', JSON.stringify(updatedOrders));
                   setPaymentSuccess(true);
                 }}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-colors shadow-md ${isPaymentValid ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
@@ -977,9 +977,9 @@ export default function App() {
               <Menu className="w-6 h-6" />
             </button>
             {activeTab === 'home' ? (
-              <h1 className="text-xl font-bold tracking-tight">ShopHub</h1>
+              <h1 className="text-xl font-bold tracking-tight font-['Roboto']">Shopmatrix</h1>
             ) : (
-              <h1 className="text-xl font-bold tracking-tight capitalize">{activeTab}</h1>
+              <h1 className="text-xl font-bold tracking-tight capitalize font-['Roboto']">{activeTab}</h1>
             )}
           </div>
           <div className="flex items-center gap-2">
