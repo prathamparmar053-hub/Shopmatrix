@@ -22,6 +22,9 @@ const PRODUCTS = [
   { id: 15, name: "Men's Slim Fit Jeans", price: 65.00, rating: 4.4, category: 'Clothing', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=80', description: 'Premium denim with a modern slim cut and a hint of stretch for all-day comfort.', origin: 'Pune, Maharashtra', deliveryDate: 'April 11, 2026' },
   { id: 16, name: "Women's Yoga Leggings", price: 38.00, rating: 4.7, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80', description: 'High-waisted, squat-proof leggings designed for maximum flexibility and support during your workouts.', origin: 'Hyderabad, Telangana', deliveryDate: 'April 8, 2026' },
   { id: 17, name: "Kids' Unisex Winter Beanie", price: 15.00, rating: 4.6, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=400&q=80', description: 'Keep your little ones warm with this cozy, knit winter beanie featuring a fun pom-pom.', origin: 'Shimla, Himachal Pradesh', deliveryDate: 'April 12, 2026' },
+  { id: 18, name: 'Full Size English Willow Cricket Kit', price: 2150.00, rating: 4.8, category: 'Sports', image: 'https://images.unsplash.com/photo-1593341646782-e0b495cff86d?auto=format&fit=crop&w=400&q=80', description: 'Complete full size cricket kit including an English willow bat, batting pads, gloves, helmet, thigh guard, and a spacious kit bag. Perfect for professional matches.', origin: 'Meerut, Uttar Pradesh', deliveryDate: 'April 9, 2026' },
+  { id: 19, name: 'Professional Full Size Cricket Kit', price: 1999.00, rating: 4.7, category: 'Sports', image: 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?auto=format&fit=crop&w=400&q=80', description: 'High-quality full size cricket kit with Kashmir willow bat, premium protective gear, and a durable duffle bag. Ideal for club cricketers.', origin: 'Jalandhar, Punjab', deliveryDate: 'April 10, 2026' },
+  { id: 20, name: 'Premium Full Size Cricket Set', price: 2050.00, rating: 4.9, category: 'Sports', image: 'https://images.unsplash.com/photo-1607734834519-d8576ae60ea6?auto=format&fit=crop&w=400&q=80', description: 'All-in-one full size cricket set featuring a lightweight bat, high-density foam pads, tactile gloves, and an adjustable helmet.', origin: 'Mumbai, Maharashtra', deliveryDate: 'April 8, 2026' }
 ];
 
 const NOTIFICATIONS = [
@@ -91,6 +94,13 @@ export default function App() {
       setUser(newUser);
       localStorage.setItem('shopmatrix_user', JSON.stringify(newUser));
       setLoginPassword('');
+      
+      // Send SMS notification
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `New sign-in on Shopmatrix: ${loginEmail}` })
+      }).catch(console.error);
     }
   };
 
@@ -503,6 +513,13 @@ export default function App() {
                   setOrders(updatedOrders);
                   localStorage.setItem('shopmatrix_orders', JSON.stringify(updatedOrders));
                   setPaymentSuccess(true);
+                  
+                  // Send SMS notification
+                  fetch('/api/notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: `New order placed on Shopmatrix for ₹${total.toFixed(2)} by ${user?.email || 'Guest'}` })
+                  }).catch(console.error);
                 }}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-colors shadow-md ${isPaymentValid ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
               >
