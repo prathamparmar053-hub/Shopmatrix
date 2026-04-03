@@ -1,27 +1,27 @@
-import { useState } from 'react';
-import { Search, ShoppingBag, Home, Grid, User, Heart, Star, Menu, Bell, LogIn, Info, Phone, HelpCircle, ChevronRight, Trash2, Minus, Plus, ArrowLeft, Send } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, ShoppingBag, Home, Grid, User, Heart, Star, Menu, Bell, LogIn, Info, Phone, HelpCircle, ChevronRight, Trash2, Minus, Plus, ArrowLeft, Send, Package, Truck, MapPin, CheckCircle, X } from 'lucide-react';
 import { motion } from 'motion/react';
 
 // Mock Data
 const CATEGORIES = ['All', 'Electronics', 'Sports', 'Wearables', 'Watches', 'Clothing'];
 const PRODUCTS = [
-  { id: 1, name: 'Pro Vision 4K Drone', price: 799.99, rating: 4.8, category: 'Electronics', image: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&w=400&q=80', description: 'Capture stunning aerial footage with this professional-grade 4K drone. Features obstacle avoidance and 30-minute flight time.' },
-  { id: 2, name: 'UltraSlim Laptop', price: 1299.50, rating: 4.9, category: 'Electronics', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=400&q=80', description: 'Powerful, lightweight, and designed for professionals on the go. Features a 14-inch retina display and all-day battery life.' },
-  { id: 3, name: 'Pro Tennis Racket', price: 150.00, rating: 4.5, category: 'Sports', image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=400&q=80', description: 'Lightweight carbon fiber tennis racket designed for maximum power and control. Perfect for intermediate to advanced players.' },
-  { id: 4, name: 'Adjustable Dumbbells', price: 85.00, rating: 4.7, category: 'Sports', image: 'https://images.unsplash.com/photo-1586401100295-7a8096fd231a?auto=format&fit=crop&w=400&q=80', description: 'Space-saving adjustable dumbbells. Easily switch weights from 5 to 52.5 lbs with a simple turn of a dial.' },
-  { id: 5, name: 'HealthTrack Smart Ring', price: 199.99, rating: 4.6, category: 'Wearables', image: 'https://images.unsplash.com/photo-1617043786394-f977fa12eddf?auto=format&fit=crop&w=400&q=80', description: 'Track your sleep, activity, and recovery with this sleek, titanium smart ring. Water-resistant and 7-day battery life.' },
-  { id: 6, name: 'VR Gaming Headset', price: 349.00, rating: 4.8, category: 'Wearables', image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=400&q=80', description: 'Immerse yourself in virtual worlds with this high-resolution standalone VR headset. No PC required.' },
-  { id: 7, name: 'Titanium Chronograph', price: 295.00, rating: 4.9, category: 'Watches', image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80', description: 'A premium titanium chronograph watch featuring sapphire crystal, luminous hands, and 100m water resistance.' },
-  { id: 8, name: 'Minimalist Leather Watch', price: 125.00, rating: 4.4, category: 'Watches', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80', description: 'Elegant minimalist watch with a genuine leather strap and a slim profile. Perfect for everyday wear.' },
-  { id: 9, name: 'Breathable Running Tee', price: 35.00, rating: 4.3, category: 'Clothing', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80', description: 'Moisture-wicking, ultra-breathable running t-shirt designed to keep you cool and dry during intense workouts.' },
-  { id: 10, name: 'Waterproof Hiking Jacket', price: 110.00, rating: 4.7, category: 'Clothing', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80', description: 'Durable, fully waterproof and windproof hiking jacket with adjustable hood and breathable mesh lining.' },
-  { id: 11, name: "Men's Classic Oxford Shirt", price: 45.00, rating: 4.6, category: 'Clothing', image: 'https://images.unsplash.com/photo-1598032895397-b9472444bf93?auto=format&fit=crop&w=400&q=80', description: 'A timeless wardrobe staple. This 100% cotton Oxford shirt offers a comfortable fit and versatile style for any occasion.' },
-  { id: 12, name: "Women's Floral Summer Dress", price: 55.00, rating: 4.8, category: 'Clothing', image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80', description: 'Lightweight and breezy, this floral dress is perfect for warm summer days and outdoor gatherings.' },
-  { id: 13, name: "Boys' Graphic T-Shirt", price: 18.00, rating: 4.5, category: 'Clothing', image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80', description: 'Fun and vibrant graphic tee made from soft, durable cotton. Perfect for active boys.' },
-  { id: 14, name: "Girls' Princess Party Dress", price: 42.00, rating: 4.9, category: 'Clothing', image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=400&q=80', description: 'A magical tulle dress with sparkling details, making every girl feel like a princess on special occasions.' },
-  { id: 15, name: "Men's Slim Fit Jeans", price: 65.00, rating: 4.4, category: 'Clothing', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=80', description: 'Premium denim with a modern slim cut and a hint of stretch for all-day comfort.' },
-  { id: 16, name: "Women's Yoga Leggings", price: 38.00, rating: 4.7, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80', description: 'High-waisted, squat-proof leggings designed for maximum flexibility and support during your workouts.' },
-  { id: 17, name: "Kids' Unisex Winter Beanie", price: 15.00, rating: 4.6, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=400&q=80', description: 'Keep your little ones warm with this cozy, knit winter beanie featuring a fun pom-pom.' },
+  { id: 1, name: 'Pro Vision 4K Drone', price: 799.99, rating: 4.8, category: 'Electronics', image: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&w=400&q=80', description: 'Capture stunning aerial footage with this professional-grade 4K drone. Features obstacle avoidance and 30-minute flight time.', origin: 'Mumbai, Maharashtra', deliveryDate: 'April 8, 2026' },
+  { id: 2, name: 'UltraSlim Laptop', price: 1299.50, rating: 4.9, category: 'Electronics', image: 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=400&q=80', description: 'Powerful, lightweight, and designed for professionals on the go. Features a 14-inch retina display and all-day battery life.', origin: 'Bangalore, Karnataka', deliveryDate: 'April 9, 2026' },
+  { id: 3, name: 'Pro Tennis Racket', price: 150.00, rating: 4.5, category: 'Sports', image: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?auto=format&fit=crop&w=400&q=80', description: 'Lightweight carbon fiber tennis racket designed for maximum power and control. Perfect for intermediate to advanced players.', origin: 'Delhi', deliveryDate: 'April 7, 2026' },
+  { id: 4, name: 'Adjustable Dumbbells', price: 85.00, rating: 4.7, category: 'Sports', image: 'https://images.unsplash.com/photo-1586401100295-7a8096fd231a?auto=format&fit=crop&w=400&q=80', description: 'Space-saving adjustable dumbbells. Easily switch weights from 5 to 52.5 lbs with a simple turn of a dial.', origin: 'Pune, Maharashtra', deliveryDate: 'April 10, 2026' },
+  { id: 5, name: 'HealthTrack Smart Ring', price: 199.99, rating: 4.6, category: 'Wearables', image: 'https://images.unsplash.com/photo-1617043786394-f977fa12eddf?auto=format&fit=crop&w=400&q=80', description: 'Track your sleep, activity, and recovery with this sleek, titanium smart ring. Water-resistant and 7-day battery life.', origin: 'Hyderabad, Telangana', deliveryDate: 'April 8, 2026' },
+  { id: 6, name: 'VR Gaming Headset', price: 349.00, rating: 4.8, category: 'Wearables', image: 'https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?auto=format&fit=crop&w=400&q=80', description: 'Immerse yourself in virtual worlds with this high-resolution standalone VR headset. No PC required.', origin: 'Chennai, Tamil Nadu', deliveryDate: 'April 11, 2026' },
+  { id: 7, name: 'Titanium Chronograph', price: 295.00, rating: 4.9, category: 'Watches', image: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80', description: 'A premium titanium chronograph watch featuring sapphire crystal, luminous hands, and 100m water resistance.', origin: 'Surat, Gujarat', deliveryDate: 'April 7, 2026' },
+  { id: 8, name: 'Minimalist Leather Watch', price: 125.00, rating: 4.4, category: 'Watches', image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80', description: 'Elegant minimalist watch with a genuine leather strap and a slim profile. Perfect for everyday wear.', origin: 'Jaipur, Rajasthan', deliveryDate: 'April 9, 2026' },
+  { id: 9, name: 'Breathable Running Tee', price: 35.00, rating: 4.3, category: 'Clothing', image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=400&q=80', description: 'Moisture-wicking, ultra-breathable running t-shirt designed to keep you cool and dry during intense workouts.', origin: 'Ludhiana, Punjab', deliveryDate: 'April 6, 2026' },
+  { id: 10, name: 'Waterproof Hiking Jacket', price: 110.00, rating: 4.7, category: 'Clothing', image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80', description: 'Durable, fully waterproof and windproof hiking jacket with adjustable hood and breathable mesh lining.', origin: 'Dehradun, Uttarakhand', deliveryDate: 'April 12, 2026' },
+  { id: 11, name: "Men's Classic Oxford Shirt", price: 45.00, rating: 4.6, category: 'Clothing', image: 'https://images.unsplash.com/photo-1598032895397-b9472444bf93?auto=format&fit=crop&w=400&q=80', description: 'A timeless wardrobe staple. This 100% cotton Oxford shirt offers a comfortable fit and versatile style for any occasion.', origin: 'Surat, Gujarat', deliveryDate: 'April 10, 2026' },
+  { id: 12, name: "Women's Floral Summer Dress", price: 55.00, rating: 4.8, category: 'Clothing', image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=400&q=80', description: 'Lightweight and breezy, this floral dress is perfect for warm summer days and outdoor gatherings.', origin: 'Mumbai, Maharashtra', deliveryDate: 'April 8, 2026' },
+  { id: 13, name: "Boys' Graphic T-Shirt", price: 18.00, rating: 4.5, category: 'Clothing', image: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80', description: 'Fun and vibrant graphic tee made from soft, durable cotton. Perfect for active boys.', origin: 'Delhi', deliveryDate: 'April 7, 2026' },
+  { id: 14, name: "Girls' Princess Party Dress", price: 42.00, rating: 4.9, category: 'Clothing', image: 'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=400&q=80', description: 'A magical tulle dress with sparkling details, making every girl feel like a princess on special occasions.', origin: 'Bangalore, Karnataka', deliveryDate: 'April 9, 2026' },
+  { id: 15, name: "Men's Slim Fit Jeans", price: 65.00, rating: 4.4, category: 'Clothing', image: 'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=400&q=80', description: 'Premium denim with a modern slim cut and a hint of stretch for all-day comfort.', origin: 'Pune, Maharashtra', deliveryDate: 'April 11, 2026' },
+  { id: 16, name: "Women's Yoga Leggings", price: 38.00, rating: 4.7, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?auto=format&fit=crop&w=400&q=80', description: 'High-waisted, squat-proof leggings designed for maximum flexibility and support during your workouts.', origin: 'Hyderabad, Telangana', deliveryDate: 'April 8, 2026' },
+  { id: 17, name: "Kids' Unisex Winter Beanie", price: 15.00, rating: 4.6, category: 'Clothing', image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=400&q=80', description: 'Keep your little ones warm with this cozy, knit winter beanie featuring a fun pom-pom.', origin: 'Shimla, Himachal Pradesh', deliveryDate: 'April 12, 2026' },
 ];
 
 const NOTIFICATIONS = [
@@ -34,6 +34,14 @@ type Product = typeof PRODUCTS[0];
 interface CartItem {
   product: Product;
   quantity: number;
+}
+
+interface Order {
+  id: string;
+  date: string;
+  items: CartItem[];
+  total: number;
+  status: string;
 }
 
 export default function App() {
@@ -62,17 +70,39 @@ export default function App() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginMobile, setLoginMobile] = useState('+91 ');
   const [loginAddress, setLoginAddress] = useState('');
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [trackingOrder, setTrackingOrder] = useState<Order | null>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem('shopmatrix_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
+    }
+    const savedOrders = localStorage.getItem('shopmatrix_orders');
+    if (savedOrders) {
+      setOrders(JSON.parse(savedOrders));
+    }
+  }, []);
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     if (loginEmail && loginPassword) {
-      setUser({ email: loginEmail, mobile: loginMobile, address: loginAddress });
+      const newUser = { email: loginEmail, mobile: loginMobile, address: loginAddress };
+      setUser(newUser);
+      localStorage.setItem('shopmatrix_user', JSON.stringify(newUser));
       setLoginPassword('');
     }
   };
 
   const handleSignOut = () => {
     setUser(null);
+    localStorage.removeItem('shopmatrix_user');
+  };
+
+  const cancelOrder = (orderId: string) => {
+    const updatedOrders = orders.filter(order => order.id !== orderId);
+    setOrders(updatedOrders);
+    localStorage.setItem('shopmatrix_orders', JSON.stringify(updatedOrders));
   };
 
   const isPaymentValid = selectedPaymentMethod && (
@@ -260,10 +290,53 @@ export default function App() {
               </button>
               {expandedSection === 'orders' && (
                 <div className="px-4 pb-4 pt-1 text-sm text-gray-600 bg-gray-50">
-                  <div className="flex flex-col items-center justify-center py-6 text-gray-400">
-                    <ShoppingBag className="w-8 h-8 mb-2 text-gray-300" />
-                    <p>No recent orders found.</p>
-                  </div>
+                  {orders.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-6 text-gray-400">
+                      <ShoppingBag className="w-8 h-8 mb-2 text-gray-300" />
+                      <p>No recent orders found.</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3 mt-2">
+                      {orders.map(order => (
+                        <div key={order.id} className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                          <div className="flex justify-between items-center mb-2 border-b border-gray-100 pb-2">
+                            <span className="font-bold text-gray-800">Order #{order.id.toUpperCase()}</span>
+                            <span className="text-xs text-gray-500">{order.date}</span>
+                          </div>
+                          <div className="space-y-2 mb-2">
+                            {order.items.map((item, idx) => (
+                              <div key={idx} className="flex justify-between text-xs">
+                                <span className="truncate pr-2">{item.quantity}x {item.product.name}</span>
+                                <span className="font-medium">₹{(item.product.price * item.quantity).toFixed(2)}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-xs font-medium ${order.status === 'Cancelled' ? 'text-red-500' : 'text-indigo-600'}`}>{order.status}</span>
+                              {order.status !== 'Cancelled' && (
+                                <>
+                                  <button 
+                                    onClick={() => setTrackingOrder(order)}
+                                    className="text-[10px] bg-indigo-50 text-indigo-600 px-2 py-1 rounded hover:bg-indigo-100 transition-colors"
+                                  >
+                                    Track
+                                  </button>
+                                  <button 
+                                    onClick={() => cancelOrder(order.id)}
+                                    className="text-[10px] bg-red-50 text-red-600 px-2 py-1 rounded hover:bg-red-100 transition-colors"
+                                  >
+                                    Cancel
+                                  </button>
+                                </>
+                              )}
+                            </div>
+                            <span className="font-bold text-gray-900">Total: ₹{order.total.toFixed(2)}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -418,7 +491,19 @@ export default function App() {
               </div>
               <button 
                 disabled={!isPaymentValid}
-                onClick={() => setPaymentSuccess(true)}
+                onClick={() => {
+                  const newOrder: Order = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    date: new Date().toLocaleDateString(),
+                    items: [...cart],
+                    total: cartTotal,
+                    status: 'Processing'
+                  };
+                  const updatedOrders = [newOrder, ...orders];
+                  setOrders(updatedOrders);
+                  localStorage.setItem('shopmatrix_orders', JSON.stringify(updatedOrders));
+                  setPaymentSuccess(true);
+                }}
                 className={`w-full py-3.5 rounded-xl font-semibold transition-colors shadow-md ${isPaymentValid ? 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200' : 'bg-gray-200 text-gray-400 cursor-not-allowed shadow-none'}`}
               >
                 Confirm Payment
@@ -721,9 +806,26 @@ export default function App() {
                 </button>
                 
                 <h3 className="text-lg font-bold mb-2">Description</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-8">
+                <p className="text-gray-600 text-sm leading-relaxed mb-6">
                   {selectedProduct.description}
                 </p>
+                
+                <div className="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100 mb-8 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="w-5 h-5 text-indigo-600 mt-0.5" />
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Ships from</p>
+                      <p className="text-sm font-semibold text-gray-900">{selectedProduct.origin}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <Truck className="w-5 h-5 text-indigo-600 mt-0.5" />
+                    <div>
+                      <p className="text-xs text-gray-500 font-medium">Estimated Delivery</p>
+                      <p className="text-sm font-semibold text-gray-900">{selectedProduct.deliveryDate}</p>
+                    </div>
+                  </div>
+                </div>
                 
                 <h3 className="text-lg font-bold mb-4">Customer Reviews</h3>
                 <div className="space-y-4 mb-6">
@@ -981,6 +1083,75 @@ export default function App() {
             </button>
           ))}
         </nav>
+
+        {/* Tracking Modal */}
+        {trackingOrder && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="bg-white rounded-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[90vh]"
+            >
+              <div className="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h3 className="font-bold text-lg">Track Order #{trackingOrder.id.toUpperCase()}</h3>
+                <button onClick={() => setTrackingOrder(null)} className="p-1 hover:bg-gray-200 rounded-full transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4 overflow-y-auto">
+                <div className="mb-6">
+                  <h4 className="font-semibold text-gray-700 mb-3">Order Details</h4>
+                  <div className="space-y-3">
+                    {trackingOrder.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-3 bg-gray-50 p-2 rounded-xl">
+                        <img src={item.product.image} alt={item.product.name} className="w-12 h-12 object-cover rounded-lg" />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{item.product.name}</p>
+                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                        </div>
+                        <span className="font-semibold text-sm">₹{(item.product.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-gray-700 mb-4">Tracking Status</h4>
+                  <div className="relative pl-4 border-l-2 border-indigo-100 space-y-6 pb-4">
+                    <div className="relative">
+                      <div className="absolute -left-[21px] bg-indigo-600 rounded-full p-1">
+                        <CheckCircle className="w-3 h-3 text-white" />
+                      </div>
+                      <p className="text-sm font-bold text-indigo-600">Order Placed</p>
+                      <p className="text-xs text-gray-500">{trackingOrder.date}</p>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute -left-[21px] bg-indigo-600 rounded-full p-1">
+                        <Package className="w-3 h-3 text-white" />
+                      </div>
+                      <p className="text-sm font-bold text-indigo-600">Processing</p>
+                      <p className="text-xs text-gray-500">Currently being packed</p>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute -left-[21px] bg-gray-200 rounded-full p-1">
+                        <Truck className="w-3 h-3 text-gray-400" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-500">Shipped</p>
+                      <p className="text-xs text-gray-400">Pending</p>
+                    </div>
+                    <div className="relative">
+                      <div className="absolute -left-[21px] bg-gray-200 rounded-full p-1">
+                        <MapPin className="w-3 h-3 text-gray-400" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-500">Out for Delivery</p>
+                      <p className="text-xs text-gray-400">Pending</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   );
